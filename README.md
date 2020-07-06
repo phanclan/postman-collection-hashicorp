@@ -1,3 +1,10 @@
+# Postman Collections for HashiCorp Products
+
+This repo has a postman collections for HashiCorp Products. For now I only have Vault, but will add others shortly.
+
+* Install Postman:
+https://learning.postman.com/docs/postman/launching-postman/installation-and-updates/
+
 ## Import HashiCorp Vault Collection
 
 1. Launch Postman
