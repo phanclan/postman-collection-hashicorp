@@ -2127,6 +2127,192 @@
 										"description": "Replace the csr with your own.\nCopy the generated certificate."
 									},
 									"response": []
+								},
+								{
+									"name": "Import signed cert - pki_int/intermediate/set-signed",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"certificate\": \"-----BEGIN CERTIFICATE-----\\nMIIDpjCCAo6gAwIBAgIUIGslpWtGQQ/Ir2Y/JCGS3ZdslHwwDQYJKoZIhvcNAQEL\\nBQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjAwNzA4MTc0MDU1WhcNMjUw\\nNzA3MTc0MTI1WjAtMSswKQYDVQQDEyJleGFtcGxlLmNvbSBJbnRlcm1lZGlhdGUg\\nQXV0aG9yaXR5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo8BD/5CQ\\nsCMH5v4mXs3B3ajpTC73lnig6aGvcHVW9Owk66ApYdXJT6i2SlXBh3rVJ5fqH81L\\nUljXByk9Tyg54Z89qLvB3XOAh+OyILg334kdWLYjbbWHP7BosIn4dAKCXy2J89PW\\nSdVmzgFzW7IUTPYtafux7uKsUnGHhwY4/1+7XDOEru8ldPquWgB3c8r97wvztN2/\\ntjgcdmcrdiUIyF9SRMB8m9ReNZaiTLI29F3khmY8pqEG6+9HDe8D/6m7bLT5Zxnz\\nIo/34siFF3OcM4p/0QLq6XsFbNuozaqX451xJ2Sobk6iBF9eXvPrB5Dbr1hwuoEb\\n4ytZh/gI7InvMQIDAQABo4HUMIHRMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E\\nBTADAQH/MB0GA1UdDgQWBBRLKn4zZfSGnR9RFtZETGVCifDvvjAfBgNVHSMEGDAW\\ngBRpq/MeK16qRZd7wovb6eEC4XWGEzA7BggrBgEFBQcBAQQvMC0wKwYIKwYBBQUH\\nMAKGH2h0dHA6Ly8xMjcuMC4wLjE6ODIwMC92MS9wa2kvY2EwMQYDVR0fBCowKDAm\\noCSgIoYgaHR0cDovLzEyNy4wLjAuMTo4MjAwL3YxL3BraS9jcmwwDQYJKoZIhvcN\\nAQELBQADggEBALt1hR29bOYqY4F1vCIdAfvxkM6neOEGII0R8AIb7sRvQ8e2Wvi2\\nOAGQMy3a6OHQ/mR0MPmjnHS9+vxywFwDbKAnOAj70qrovrPWrykvryXqBjPyI9AR\\na9epzcBcriBIpA/m75Bxtfbrcm57CxV/X8aS3JHlkDg7TMICm1MfIbjmYTrJrvAh\\nwGIaZ4GB1WR3NW+wlE9GyQmr17wehBXT1CELU1xBbkC6J/msRgtbiAAJ53NRRSYc\\nCDS6NQhXOE8IT5N1yZScDpgdbPspV2LdWSE16Tdk0NcZejfc8iBPPw9eNprAvL1q\\nUDqoGcV4+gjj0PH5znEPnAZftta02M6BF7g=\\n-----END CERTIFICATE-----\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/intermediate/set-signed",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"intermediate",
+												"set-signed"
+											]
+										},
+										"description": "Once the CSR is signed and the root CA returns a certificate, it can be imported back into Vault using the `/pki_int/intermediate/set-signed` endpoint."
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Create a Role",
+							"item": [
+								{
+									"name": "Create a role - pki_int/roles/example-dot-com",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"allowed_domains\": \"example.com\",\n  \"allow_subdomains\": true,\n  \"max_ttl\": \"720h\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/roles/example-dot-com",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"roles",
+												"example-dot-com"
+											]
+										},
+										"description": "create a role named `example-dot-com`."
+									},
+									"response": []
+								}
+							],
+							"description": "A role is a logical name that maps to a policy used to generate those credentials. It allows configuration parameters to control certificate common names, alternate names, the key uses that they are valid for, and more.\n\nHere are a few noteworthy parameters:\nParam\tDescription\n`allowed_domains`\tSpecifies the domains of the role (used with `allow_bare_domains` and `allow-subdomains` options)\n`allow_bare_domains`\tSpecifies if clients can request certificates matching the value of the actual domains themselves\n`allow_subdomains`\tSpecifies if clients can request certificates with CNs that are subdomains of the CNs allowed by the other role options (NOTE: This includes wildcard subdomains.)\n`allow_glob_domains`\tAllows names specified in allowed_domains to contain glob patterns (e.g. ftp*.example.com)\n\nIn this step, you are going to create a role named `example-dot-com`.",
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Certificate Management",
+							"item": [
+								{
+									"name": "Issue Certificate - pki_int/issue/example-dot-com",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"common_name\": \"test.example.com\", \"ttl\": \"24h\"}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/issue/example-dot-com",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"issue",
+												"example-dot-com"
+											]
+										},
+										"description": "Invoke the `/pki_int/issue/<role_name>` endpoint to request a new certificate.\n\nRequest a certificate for the `test.example.com` domain based on the `example-dot-com` role."
+									},
+									"response": []
+								},
+								{
+									"name": "Revoke Certificate - pki_int/revoke",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"serial_number\": \"14:34:4d:80:12:9c:cd:d2:a6:ba:3b:65:5c:83:07:cf:41:2a:a1:02\"}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/revoke",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"revoke"
+											]
+										},
+										"description": "If a certificate must be revoked, you can easily perform the revocation action which will cause the CRL to be regenerated. When the CRL is regenerated, any expired certificates are removed from the CRL.\n\nInvoke the `/pki_int/revoke` endpoint to invoke a certificate using its serial number.\n\nReplace serial number in the body with your own."
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Expired Certs - pki_int/tidy",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"tidy_cert_store\": true, \"tidy_revoked_certs\": true, \"safety_buffer\": \"1s\"}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/tidy",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"tidy"
+											]
+										},
+										"description": "Keep the storage backend and CRL by periodically removing certificates that have expired and are past a certain buffer period beyond their expiration time.\n\nInvoke the `/pki_int/tidy` endpoint to remove revoked certificate and clean the CRL."
+									},
+									"response": []
+								}
+							],
+							"description": "Keep certificate lifetimes short to align with Vault's philosophy of short-lived secrets.",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "7a6fa9f6-9236-45e2-8234-ba0ea7ec6688",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f50adc6d-f9c3-4765-9242-1c65c8254686",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
 								}
 							],
 							"protocolProfileBehavior": {},

@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "997b1c06-3842-4f86-b014-6a341ed58878",
+		"name": "Consul",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "nodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2502acbd-6283-456f-b917-8c5c67e3ed64",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code ===200;",
+							"// Check for Response time is less than 200ms",
+							"tests[\"Response time is less than 200ms\"] = responseTime < 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{CONSUL_HTTP_ADDR}}/v1/catalog/nodes",
+					"host": [
+						"{{CONSUL_HTTP_ADDR}}"
+					],
+					"path": [
+						"v1",
+						"catalog",
+						"nodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-license",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{CONSUL_HTTP_ADDR}}/v1/operator/license",
+					"host": [
+						"{{CONSUL_HTTP_ADDR}}"
+					],
+					"path": [
+						"v1",
+						"operator",
+						"license"
+					]
+				},
+				"description": "Gets the Consul Enterprise license."
+			},
+			"response": []
+		},
+		{
+			"name": "put-license",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{CONSUL_LICENSE}}"
+				},
+				"url": {
+					"raw": "{{CONSUL_HTTP_ADDR}}/v1/operator/license",
+					"host": [
+						"{{CONSUL_HTTP_ADDR}}"
+					],
+					"path": [
+						"v1",
+						"operator",
+						"license"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
