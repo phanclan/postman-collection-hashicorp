@@ -1862,6 +1862,279 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "PKI",
+					"item": [
+						{
+							"name": "Generate Root CA",
+							"item": [
+								{
+									"name": "sys/mounts/pki",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"type\":\"pki\"}"
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8200/v1/sys/mounts/pki",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8200",
+											"path": [
+												"v1",
+												"sys",
+												"mounts",
+												"pki"
+											]
+										},
+										"description": "Mount PKI Secrets engine.\nNo output if successful - POST"
+									},
+									"response": []
+								},
+								{
+									"name": "sys/mounts/pki/tune",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"max_lease_ttl\":\"87600h\"}"
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8200/v1/sys/mounts/pki/tune",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8200",
+											"path": [
+												"v1",
+												"sys",
+												"mounts",
+												"pki",
+												"tune"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Enable pki at pki_int - pki/root/generate/internal",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"common_name\": \"example.com\",\n  \"ttl\": \"87600h\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki/root/generate/internal",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki",
+												"root",
+												"generate",
+												"internal"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Configure CA and CRL URLs pki/config/urls",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"issuing_certificates\": \"http://127.0.0.1:8200/v1/pki/ca\",\n  \"crl_distribution_points\": \"http://127.0.0.1:8200/v1/pki/crl\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki/config/urls",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki",
+												"config",
+												"urls"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Generate Intermediate CA",
+							"item": [
+								{
+									"name": "Generate Intermediate CA - sys/mounts/pki_int",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"type\":\"pki\"}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/sys/mounts/pki_int",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"sys",
+												"mounts",
+												"pki_int"
+											]
+										},
+										"description": "Enable the `pki` secrets engine at `pki_int` path."
+									},
+									"response": []
+								},
+								{
+									"name": "Tune pki_int sys/mounts/pki_int/tune",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"max_lease_ttl\":\"43800h\"}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/sys/mounts/pki_int/tune",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"sys",
+												"mounts",
+												"pki_int",
+												"tune"
+											]
+										},
+										"description": "Tune the pki_int secrets engine to issue certificates with a maximum time-to-live (TTL) of 43800 hours."
+									},
+									"response": []
+								},
+								{
+									"name": "Generate intermediate cert - pki_int/intermediate/generate/internal",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"common_name\": \"example.com Intermediate Authority\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki_int/intermediate/generate/internal",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki_int",
+												"intermediate",
+												"generate",
+												"internal"
+											]
+										},
+										"description": "Generate an intermediate certificate.\npki_int is path. Change as needed for your environment.\n"
+									},
+									"response": []
+								},
+								{
+									"name": "Sign intermediate cert - /pki/root/sign-intermediate",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-Vault-Token",
+												"value": "{{VAULT_TOKEN}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"csr\": \"-----BEGIN CERTIFICATE REQUEST-----\\nMIICcjCCAVoCAQAwLTErMCkGA1UEAxMiZXhhbXBsZS5jb20gSW50ZXJtZWRpYXRl\\nIEF1dGhvcml0eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKPAQ/+Q\\nkLAjB+b+Jl7Nwd2o6Uwu95Z4oOmhr3B1VvTsJOugKWHVyU+otkpVwYd61SeX6h/N\\nS1JY1wcpPU8oOeGfPai7wd1zgIfjsiC4N9+JHVi2I221hz+waLCJ+HQCgl8tifPT\\n1knVZs4Bc1uyFEz2LWn7se7irFJxh4cGOP9fu1wzhK7vJXT6rloAd3PK/e8L87Td\\nv7Y4HHZnK3YlCMhfUkTAfJvUXjWWokyyNvRd5IZmPKahBuvvRw3vA/+pu2y0+WcZ\\n8yKP9+LIhRdznDOKf9EC6ul7BWzbqM2ql+OdcSdkqG5OogRfXl7z6weQ269YcLqB\\nG+MrWYf4COyJ7zECAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IBAQBqMgCqXPm5a7qN\\nXjGhFjait0nj/LZfHqXF4+KnVhoLSnphWItxPZKJmGhRWU0/0i/KohhH+BYAJ3d8\\nmNIv6bpez/5XoSoYvJQV0ArCHpPgB+qFzgch9kpQw0jfT+Ys6a9ffxaox6bgcsMc\\nqBCLq7f7BYZBxUUok7EqAjljTuhV70ElYlBDnODANKtoAR60UqsWcJC6gdtEsOyP\\n9BasXcoRJ3L3fTTJxT1BL+08zn3ey3wa2r4YmjhBhwVOd3je5+nEovz3FCJGmCsO\\nFyUT9tOHlCKKQZvNiYXsUrCIQauGGaoWUJDryr+gS5C+lJTciNBjqh/aOfpam0oQ\\nK9yBC1wa\\n-----END CERTIFICATE REQUEST-----\",\n  \"format\": \"pem_bundle\",\n  \"ttl\": \"43800h\"\n}"
+										},
+										"url": {
+											"raw": "{{VAULT_ADDR}}/v1/pki/root/sign-intermediate",
+											"host": [
+												"{{VAULT_ADDR}}"
+											],
+											"path": [
+												"v1",
+												"pki",
+												"root",
+												"sign-intermediate"
+											]
+										},
+										"description": "Replace the csr with your own.\nCopy the generated certificate."
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
